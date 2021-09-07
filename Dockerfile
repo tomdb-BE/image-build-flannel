@@ -1,5 +1,6 @@
-ARG UBI_IMAGE=registry.access.redhat.com/ubi7/ubi-minimal:latest
-ARG GO_IMAGE=rancher/hardened-build-base:v1.15.8b5
+ARG UBI_IMAGE
+ARG GO_IMAGE
+
 FROM ${UBI_IMAGE} as ubi
 FROM ${GO_IMAGE} as builder
 # setup required packages
@@ -11,8 +12,8 @@ RUN set -x \
     linux-headers \
     make
 # setup the build
-ARG ARCH="amd64"
-ARG K3S_ROOT_VERSION="v0.8.1"
+ARG ARCH
+ARG K3S_ROOT_VERSION
 ADD https://github.com/rancher/k3s-root/releases/download/${K3S_ROOT_VERSION}/k3s-root-xtables-${ARCH}.tar /opt/xtables/k3s-root-xtables.tar
 RUN tar xvf /opt/xtables/k3s-root-xtables.tar -C /opt/xtables
 ARG TAG="v0.14.0"
@@ -31,8 +32,7 @@ RUN install -s bin/* /usr/local/bin
 RUN flanneld --version
 
 FROM ubi
-RUN microdnf update -y          && \
-    microdnf install -y yum     && \
+RUN yum update -y && \
     yum install -y ca-certificates \
     strongswan net-tools which  && \
     rm -rf /var/cache/yum

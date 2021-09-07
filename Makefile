@@ -4,15 +4,14 @@ ifeq ($(ARCH),)
 ARCH=$(shell go env GOARCH)
 endif
 
-BUILD_META=-build$(shell date +%Y%m%d)
+BUILD_META=-multiarch-build$(shell date +%Y%m%d)
 ORG ?= rancher
 PKG ?= github.com/flannel-io/flannel
 SRC ?= github.com/flannel-io/flannel
 TAG ?= v0.14.0$(BUILD_META)
-
-ifneq ($(DRONE_TAG),)
-TAG := $(DRONE_TAG)
-endif
+UBI_IMAGE ?= centos:7
+GOLANG_VERSION ?= v1.16.6b7-multiarch
+K3S_ROOT_VERSION ?= v0.9.1
 
 ifeq (,$(filter %$(BUILD_META),$(TAG)))
 $(error TAG needs to end with build metadata: $(BUILD_META))
@@ -26,6 +25,9 @@ image-build:
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
+                --build-arg GO_IMAGE=$(ORG)/hardened-build-base:$(GOLANG_VERSION) \
+                --build-arg UBI_IMAGE=$(UBI_IMAGE) \
+                --build-arg K3S_ROOT_VERSION=$(K3S_ROOT_VERSION) \
 		--tag $(ORG)/hardened-flannel:$(TAG) \
 		--tag $(ORG)/hardened-flannel:$(TAG)-$(ARCH) \
 	.
