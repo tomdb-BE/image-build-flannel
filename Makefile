@@ -20,7 +20,6 @@ endif
 .PHONY: image-build
 image-build:
 	docker build \
-		--pull \
 		--build-arg ARCH=$(ARCH) \
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
