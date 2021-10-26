@@ -8,10 +8,14 @@ BUILD_META ?= -multiarch-build$(shell date +%Y%m%d)
 ORG ?= rancher
 PKG ?= github.com/flannel-io/flannel
 SRC ?= github.com/flannel-io/flannel
-TAG ?= v0.14.0$(BUILD_META)
 UBI_IMAGE ?= centos:7
-GOLANG_VERSION ?= v1.16.6b7-multiarch
+GOLANG_VERSION ?= v1.16.7b7-multiarch
 K3S_ROOT_VERSION ?= v0.9.1
+TAG ?= v0.15.1$(BUILD_META)
+
+ifneq ($(DRONE_TAG),)
+TAG := $(DRONE_TAG)
+endif
 
 ifeq (,$(filter %$(BUILD_META),$(TAG)))
 $(error TAG needs to end with build metadata: $(BUILD_META))
