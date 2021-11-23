@@ -33,7 +33,9 @@ RUN install -s bin/* /usr/local/bin
 RUN flanneld --version
 
 FROM ubi
-RUN yum install -y ca-certificates \
+RUN microdnf update -y          && \
+    microdnf install -y yum     && \
+    yum install -y ca-certificates \
     strongswan net-tools which  && \
     rm -rf /var/cache/yum
 COPY --from=builder /opt/xtables/bin/ /usr/sbin/
