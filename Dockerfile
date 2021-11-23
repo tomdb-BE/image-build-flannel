@@ -35,13 +35,13 @@ RUN flanneld --version
 FROM ubi AS ubi-updated
 RUN microdnf update -y
 
-FROM ubi-updated AS kubernetes
-# As ubi8 does not have the strongswan package, install from centos8 (method used by Calico-node).
-ADD https://raw.githubusercontent.com/projectcalico/node/master/centos.repo /etc/yum.repos.d/
-RUN rm /etc/yum.repos.d/ubi.repo && \
+FROM ubi
+RUN microdnf update -y && \
+    rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+    microdnf clean all && \
     microdnf install --setopt=tsflags=nodocs \
     ca-certificates strongswan net-tools which  && \
-    microdnf clean all && \
-    rm -rf /var/cache/yum
+    rm -rf /var/cache/yum && \
+    microdnf remove epel-release
 COPY --from=builder /opt/xtables/bin/ /usr/sbin/
 COPY --from=builder /usr/local/bin/ /opt/bin/
