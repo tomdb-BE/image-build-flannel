@@ -9,7 +9,7 @@ ORG ?= rancher
 PKG ?= github.com/flannel-io/flannel
 SRC ?= github.com/flannel-io/flannel
 UBI_IMAGE ?= registry.access.redhat.com/ubi8/ubi-minimal:latest
-GOLANG_VERSION ?= v1.17.%b7-multiarch
+GOLANG_VERSION ?= v1.17.5b7-multiarch
 TAG ?= v0.15.1$(BUILD_META)
 K3S_ROOT_VERSION ?= v0.10.1
 
