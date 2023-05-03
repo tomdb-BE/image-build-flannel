@@ -27,6 +27,7 @@ image-build:
 		--build-arg PKG=$(PKG) \
 		--build-arg SRC=$(SRC) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
+		--build-arg ORG=${ORG} \
 		--tag $(ORG)/hardened-flannel:$(TAG) \
 		--tag $(ORG)/hardened-flannel:$(TAG)-$(ARCH) \
 		--build-arg K3S_ROOT_VERSION=$(K3S_ROOT_VERSION) \
